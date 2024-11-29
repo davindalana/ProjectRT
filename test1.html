@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>360&deg; Image Gallery</title>
+    <meta name="description" content="360&deg; Image Gallery - A-Frame">
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+    <script
+        src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+
+    <script id="link" type="text/html">
+      <a-entity class="link"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: ${thumb}"
+        event-set__mouseenter="scale: 1.2 1.2 1"
+        event-set__mouseleave="scale: 1 1 1"
+        event-set__click="material.src: ${src}; _target: #image-360; _delay: 300"
+        event-set__click-text="_target: #image-text; value: ${text}"
+        proxy-event="event: click; to: #image-360; as: fade"
+        sound="on: click; src: #click-sound">
+        <a-text value="${text}" position="0 -0.75 0" align="center" color="black"></a-text>
+      </a-entity>
+    </script>
+</head>
+
+<body>
+    <a-scene>
+        <a-assets>
+            <img id="taman-slamet" crossorigin="anonymous" src="GS__1706.JPG">
+            <img id="city-thumb" crossorigin="anonymous" src="Screenshot 2024-09-25 at 10.45.29.png">
+            <img id="cubes-thumb" crossorigin="anonymous" src="Screenshot 2024-09-25 at 10.47.45.png">
+            <img id="sechelt-thumb" crossorigin="anonymous" src="Screenshot 2024-09-25 at 10.48.43.png">
+            <img id="ub-guest-house" crossorigin="anonymous" src="UB_Guest_House_360.jpg"> <!-- New 360 image -->
+            <audio id="click-sound" crossorigin="anonymous"
+                src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+            <img id="taman-tjerme" crossorigin="anonymous" src="GS__1702.JPG">
+            <img id="sechelt" crossorigin="anonymous" src="GS__1694.JPG">
+            <img id="info-icon" src="https://cdn-icons-png.flaticon.com/512/1828/1828778.png">
+            <img id="taman-slamet2" crossorigin="anonymous" src="GS__1703.JPG">
+            <img id="taman-slamet3" crossorigin="anonymous" src="GS__1704.JPG">
+            <img id="taman-slamet4" crossorigin="anonymous" src="GS__1705.JPG">
+            <img id="taman-tjerme2" crossorigin="anonymous" src="GS__1700.JPG">
+        </a-assets>
+
+        <a-sky id="image-360" radius="10" src="#taman-slamet"
+            animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+            animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"></a-sky>
+
+        <a-text id="image-text" value="VR Tour 360 Taman Kota Malang" position="0 2 -3" align="center" width="6"
+            color="white"></a-text>
+
+        <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4">
+            <a-entity template="src: #link" data-src="#taman-tjerme" data-thumb="#cubes-thumb"
+                data-text="Taman Tjerme"></a-entity>
+            <a-entity template="src: #link" data-src="#taman-slamet" data-thumb="#city-thumb"
+                data-text="Taman Slamet"></a-entity>
+            <a-entity template="src: #link" data-src="#sechelt" data-thumb="#sechelt-thumb"
+                data-text="Kelas Filkom"></a-entity>
+            <a-entity template="src: #link" data-src="#ub-guest-house" data-thumb="#cubes-thumb"
+                data-text="UB Guest House 360°" position="0 3 0"></a-entity> <!-- Link to UB Guest House -->
+        </a-entity>
+
+        <a-entity id="circle-entity" visible="true" position="-4 0 0">
+            <a-circle position="0 0 0" radius="0.2" color="white" material="opacity: 0.7" rotation="-90 90 0"
+                class="clickable" event-set__mouseenter="color: springgreen" event-set__mouseleave="color: white"
+                sound="on: click; src: #click-sound" onclick="changeImage('#taman-slamet2')">
+            </a-circle>
+        </a-entity>
+
+        <a-entity id="circle-navigate" visible="false" position="0 0 -4.5">
+            <a-circle position="0 0 0" radius="0.2" color="white" material="opacity: 0.7" rotation="-90 90 0"
+                class="clickable" event-set__mouseenter="color: springgreen" event-set__mouseleave="color: white"
+                sound="on: click; src: #click-sound" onclick="changeImage('#taman-slamet3')">
+                <!-- Ganti ke gambar berikutnya -->
+            </a-circle>
+        </a-entity>
+
+        <a-entity id="circle-navigate-3" visible="false" position="-2 0 -5">
+            <a-circle position="0 0 0" radius="0.2" color="white" material="opacity: 0.7" rotation="-90 90 0"
+                class="clickable" event-set__mouseenter="color: springgreen" event-set__mouseleave="color: white"
+                sound="on: click; src: #click-sound" onclick="changeImage('#taman-slamet4')">
+                <!-- Ganti ke gambar Taman Slamet 3 -->
+            </a-circle>
+        </a-entity>
+
+
+
+        <!-- Tooltip Informasi -->
+        <a-entity id="tooltip" visible="true" position="-1 1.5 -3">
+            <a-image src="#info-icon" width="0.5" height="0.5" class="clickable"
+                event-set__mouseenter="scale: 1.2 1.2 1" event-set__mouseleave="scale: 1 1 1"
+                sound="on: click; src: #click-sound">
+            </a-image>
+            <a-text value="Basic Information" position="0 -0.75 0" align="center" color="white" width="4">
+            </a-text>
+        </a-entity>
+
+
+        <a-entity id="circle-tjerme" visible="false" position="0 0 -3">
+            <a-circle position="0 0 0" radius="20" color="blue" material="opacity: 0.7" rotation="-90 90 0"
+                class="clickable" event-set__mouseenter="color: dodgerblue" event-set__mouseleave="color: blue"
+                sound="on: click; src: #click-sound" onclick="changeImage('#taman-tjerme2')">
+                <!-- Navigasi ke Taman Tjerme 2 -->
+            </a-circle>
+        </a-entity>
+
+
+        <!-- Tooltip untuk Taman Tjerme -->
+        <a-entity id="tooltip-tjerme" visible="false" position="-1 0 -3">
+            <a-image src="#info-icon" width="0.5" height="0.5" class="clickable"
+                event-set__mouseenter="scale: 1.2 1.2 1" event-set__mouseleave="scale: 1 1 1"
+                sound="on: click; src: #click-sound">
+            </a-image>
+            <a-text value="Welcome to Taman Tjerme" position="0 -0.75 0" align="center" color="white" width="4">
+            </a-text>
+        </a-entity>
+
+
+        <script>
+            let initialImage = '#taman-slamet'; // ID gambar awal (Taman Slamet)
+            let currentImage = initialImage;   // Melacak gambar saat ini
+
+            function changeImage(newImageId) {
+                const sky = document.querySelector('#image-360');
+                const circle = document.querySelector('#circle-entity');
+                const tooltip = document.querySelector('#tooltip');
+                const navigateCircle = document.querySelector('#circle-navigate');
+                const navigateCircle3 = document.querySelector('#circle-navigate-3');
+                const circleTjerme = document.querySelector('#circle-tjerme');
+                const tooltipTjerme = document.querySelector('#tooltip-tjerme');
+
+                // Ganti gambar di sky
+                sky.setAttribute('src', newImageId);
+
+                // Sembunyikan semua elemen
+                circle.setAttribute('visible', 'false');
+                tooltip.setAttribute('visible', 'false');
+                navigateCircle.setAttribute('visible', 'false');
+                navigateCircle3.setAttribute('visible', 'false');
+                circleTjerme.setAttribute('visible', 'false');
+                tooltipTjerme.setAttribute('visible', 'false');
+
+                // Kontrol visibilitas berdasarkan gambar yang dipilih
+                if (newImageId === '#taman-slamet') {
+                    circle.setAttribute('visible', 'true');
+                    tooltip.setAttribute('visible', 'true');
+                } else if (newImageId === '#taman-tjerme') {
+                    circleTjerme.setAttribute('visible', 'true');
+                    tooltipTjerme.setAttribute('visible', 'true');
+                } else if (newImageId === '#taman-slamet2') {
+                    navigateCircle.setAttribute('visible', 'true');
+                } else if (newImageId === '#taman-slamet3') {
+                    navigateCircle3.setAttribute('visible', 'true');
+                }
+            }
+
+        </script>
+
+
+
+        <a-entity id="camera" camera position="0 1.6 0" near="0.1" far="100" look-controls>
+            <a-cursor id="cursor"
+                animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+                animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+                event-set__mouseenter="_event: mouseenter; color: springgreen"
+                event-set__mouseleave="_event: mouseleave; color: white" raycaster="objects: .link, .clickable"
+                color="wh"></a-cursor>
+        </a-entity>
+
+    </a-scene>
+</body>
+
+</html>
